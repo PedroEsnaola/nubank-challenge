@@ -1,5 +1,6 @@
 package br.com.nubank.application.operator;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,8 +13,6 @@ public class FinanceOperationContext {
     private long totalShares = 0L;
     private BigDecimal loss = BigDecimal.ZERO;
 
-    public FinanceOperationContext(BigDecimal tax, BigDecimal zero, int i) {
-    }
 
     public void addShares(long quantity) {
         this.totalShares += quantity;

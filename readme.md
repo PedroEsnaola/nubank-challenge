@@ -1,4 +1,4 @@
-# Nubank Code Challange
+# Nubank Code Challenge
 
 Aplicação para calculo de ganho de capital em compra e venda de ações.
 
@@ -29,6 +29,7 @@ os dados trafegados para tao bem como de dentro da camada de application
 Com o objetivo de garantir extensibilidade, testabilidade e um codigo limpo e claro, foi utilizado no calculo das
 operacões financeiras o padrão factory, visando a correta separação da responsabilidade entre operações de compra e de
 venda e permitindo, com facilidade a adesão de novas modalidades de operações
+citar solid
 
 ## Tecnologias Adotada
 
