@@ -53,3 +53,16 @@ o build
   ```
 - Esse comando, irá efetivamente inicializar o container a partir da imagem, os argumentos -i e -t indicam que após
   iniciado, um terminal interativo ficará disponivel para permitir o uso da ferramenta
+
+
+## Executando os testes
+
+Com o objetivo de garantir o correto funcionamento da aplicação, foram inseridos testes unitarios e integrados utilizando Junit5
+Para executar os testes é necessário possuir o [Maven](https://maven.apache.org/) instalado
+
+- Abra o terminal na pasta do projeto
+- Execute o comando
+  ```bash
+  mvn test
+  ```
+- Com isso os testes serão executados e validados
