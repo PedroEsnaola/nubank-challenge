@@ -1,0 +1,62 @@
+package br.com.nubank.application.operator;
+
+import br.com.nubank.domain.model.FinanceOperation;
+import br.com.nubank.domain.model.FinanceOperationResult;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+public class SellFinanceOperationProcessor implements FinanceOperationProcessor {
+
+    public static final int MINIMUM_PROFIT_TAXABLE_AMOUNT = 20000;
+
+    @Override
+    public FinanceOperationResult process(FinanceOperation financeOperation, FinanceOperatorContext financeOperatorContext) {
+        BigDecimal profit = calculateProfit(financeOperation.getUnitCost(), financeOperation.getQuantity(), financeOperatorContext.getAverageCost());
+        BigDecimal tax = calculateTax(financeOperatorContext.getLoss(), financeOperation.getUnitCost(), financeOperation.getQuantity(), profit);
+        BigDecimal loss = calculatePreviousLoss(financeOperatorContext.getLoss(), profit);
+        financeOperatorContext.setLoss(loss);
+        financeOperatorContext.subtractShares(financeOperation.getQuantity());
+        return new FinanceOperationResult(tax.setScale(2, RoundingMode.HALF_EVEN));
+    }
+
+    @Override
+    public FinanceOperation.Operation getOperationType() {
+        return FinanceOperation.Operation.sell;
+    }
+
+    public BigDecimal calculateProfit(BigDecimal unitCost, long quantity,BigDecimal avgCost){
+        BigDecimal totalSaleValue = unitCost.multiply(BigDecimal.valueOf(quantity));
+        BigDecimal totalInvestment = avgCost.multiply(BigDecimal.valueOf(quantity));
+        return totalSaleValue.subtract(totalInvestment);
+    }
+
+    private BigDecimal calculatePreviousLoss(BigDecimal previousLoss, BigDecimal profit) {
+
+        if (profit.compareTo(BigDecimal.ZERO) < 0) {
+            return previousLoss.add(profit.abs());
+        } else if (previousLoss.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal deductible = previousLoss.min(profit);
+            return previousLoss.subtract(deductible);
+        }
+
+        return previousLoss;
+    }
+
+    private BigDecimal calculateTax(BigDecimal previousLoss, BigDecimal unitCost, long quantity, BigDecimal profit) {
+        BigDecimal totalSaleValue = unitCost.multiply(BigDecimal.valueOf(quantity));
+
+        if (profit.compareTo(BigDecimal.ZERO) >= 0) {
+            if (previousLoss.compareTo(BigDecimal.ZERO) > 0) {
+                BigDecimal deductible = previousLoss.min(profit);
+                profit = profit.subtract(deductible);
+            }
+
+            if (totalSaleValue.compareTo(BigDecimal.valueOf(MINIMUM_PROFIT_TAXABLE_AMOUNT)) > 0) {
+                return profit.multiply(BigDecimal.valueOf(0.2));
+            }
+        }
+
+        return BigDecimal.ZERO;
+    }
+}
