@@ -6,17 +6,17 @@ import br.com.nubank.domain.model.FinanceOperationResult;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class BuyFinanceOperationProcessor implements FinanceOperationProcessor{
+public class BuyFinanceOperationProcessor implements FinanceOperationProcessor {
     @Override
-    public FinanceOperationResult process(FinanceOperation financeOperation, FinanceOperatorContext financeOperatorContext) {
-        financeOperatorContext.setAverageCost(calculateNewAverageCost(financeOperatorContext.getAverageCost(), financeOperatorContext.getTotalShares(), financeOperation.getUnitCost(), financeOperation.getQuantity()));
-        financeOperatorContext.addShares(financeOperation.getQuantity());
+    public FinanceOperationResult process(FinanceOperation financeOperation, FinanceOperationContext financeOperationContext) {
+        financeOperationContext.setAverageCost(calculateNewAverageCost(financeOperationContext.getAverageCost(), financeOperationContext.getTotalShares(), financeOperation.getUnitCost(), financeOperation.getQuantity()));
+        financeOperationContext.addShares(financeOperation.getQuantity());
         return new FinanceOperationResult(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_EVEN));
     }
 
     @Override
     public FinanceOperation.Operation getOperationType() {
-        return FinanceOperation.Operation.buy;
+        return FinanceOperation.Operation.BUY;
     }
 
 

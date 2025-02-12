@@ -2,24 +2,24 @@ package br.com.nubank.presentation;
 
 import br.com.nubank.application.FinanceOperationsCalculator;
 import br.com.nubank.application.operator.BuyFinanceOperationProcessor;
-import br.com.nubank.application.operator.FinanceOperatorFactory;
+import br.com.nubank.application.operator.FinanceOperationProcessorFactory;
 import br.com.nubank.application.operator.SellFinanceOperationProcessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut;
 import static com.github.stefanbirkner.systemlambda.SystemLambda.withTextFromSystemIn;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-
 public class FinanceOperationCLITests {
 
-    FinanceOperationCLI underTest = new FinanceOperationCLI(new ObjectMapper(), new FinanceOperationsCalculator(new FinanceOperatorFactory(List.of(new BuyFinanceOperationProcessor(), new SellFinanceOperationProcessor()))));
+    FinanceOperationCLI underTest = new FinanceOperationCLI( JsonMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).build(), new FinanceOperationsCalculator(new FinanceOperationProcessorFactory(List.of(new BuyFinanceOperationProcessor(), new SellFinanceOperationProcessor()))));
 
     @Test
     void testConsoleInputAndOutput() throws Exception {
-
 
 
         // Simulação de entradas via System.in
@@ -29,7 +29,7 @@ public class FinanceOperationCLITests {
         // Usando SystemLambda para simular entradas + capturar saídas
         String output = tapSystemOut(() -> {
             // Executa o código principal da aplicação
-            withTextFromSystemIn(input1,input2, input3, "exit")
+            withTextFromSystemIn(input1, input2, input3, "exit")
                     .execute(() -> {
                         underTest.start();
                     });

@@ -7,12 +7,12 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-public class FinanceOperatorContext {
+public class FinanceOperationContext {
     private BigDecimal averageCost = BigDecimal.ZERO;
     private long totalShares = 0L;
     private BigDecimal loss = BigDecimal.ZERO;
 
-    public FinanceOperatorContext(BigDecimal tax, BigDecimal zero, int i) {
+    public FinanceOperationContext(BigDecimal tax, BigDecimal zero, int i) {
     }
 
     public void addShares(long quantity) {

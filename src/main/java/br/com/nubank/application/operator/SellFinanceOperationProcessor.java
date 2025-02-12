@@ -11,21 +11,21 @@ public class SellFinanceOperationProcessor implements FinanceOperationProcessor 
     public static final int MINIMUM_PROFIT_TAXABLE_AMOUNT = 20000;
 
     @Override
-    public FinanceOperationResult process(FinanceOperation financeOperation, FinanceOperatorContext financeOperatorContext) {
-        BigDecimal profit = calculateProfit(financeOperation.getUnitCost(), financeOperation.getQuantity(), financeOperatorContext.getAverageCost());
-        BigDecimal tax = calculateTax(financeOperatorContext.getLoss(), financeOperation.getUnitCost(), financeOperation.getQuantity(), profit);
-        BigDecimal loss = calculatePreviousLoss(financeOperatorContext.getLoss(), profit);
-        financeOperatorContext.setLoss(loss);
-        financeOperatorContext.subtractShares(financeOperation.getQuantity());
+    public FinanceOperationResult process(FinanceOperation financeOperation, FinanceOperationContext financeOperationContext) {
+        BigDecimal profit = calculateProfit(financeOperation.getUnitCost(), financeOperation.getQuantity(), financeOperationContext.getAverageCost());
+        BigDecimal tax = calculateTax(financeOperationContext.getLoss(), financeOperation.getUnitCost(), financeOperation.getQuantity(), profit);
+        BigDecimal loss = calculatePreviousLoss(financeOperationContext.getLoss(), profit);
+        financeOperationContext.setLoss(loss);
+        financeOperationContext.subtractShares(financeOperation.getQuantity());
         return new FinanceOperationResult(tax.setScale(2, RoundingMode.HALF_EVEN));
     }
 
     @Override
     public FinanceOperation.Operation getOperationType() {
-        return FinanceOperation.Operation.sell;
+        return FinanceOperation.Operation.SELL;
     }
 
-    public BigDecimal calculateProfit(BigDecimal unitCost, long quantity,BigDecimal avgCost){
+    public BigDecimal calculateProfit(BigDecimal unitCost, long quantity, BigDecimal avgCost) {
         BigDecimal totalSaleValue = unitCost.multiply(BigDecimal.valueOf(quantity));
         BigDecimal totalInvestment = avgCost.multiply(BigDecimal.valueOf(quantity));
         return totalSaleValue.subtract(totalInvestment);

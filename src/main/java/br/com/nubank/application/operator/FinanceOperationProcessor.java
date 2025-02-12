@@ -5,7 +5,8 @@ import br.com.nubank.domain.model.FinanceOperationResult;
 
 public interface FinanceOperationProcessor {
 
-    FinanceOperationResult process(FinanceOperation financeOperation, FinanceOperatorContext financeOperatorContext);
+    FinanceOperationResult process(FinanceOperation financeOperation, FinanceOperationContext financeOperationContext);
+
     FinanceOperation.Operation getOperationType();
 
 }

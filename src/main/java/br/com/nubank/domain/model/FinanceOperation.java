@@ -18,8 +18,8 @@ public class FinanceOperation {
     private long quantity;
 
 
-    public enum Operation{
-        buy, sell;
+    public enum Operation {
+        BUY, SELL;
     }
 
 }

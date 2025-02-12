@@ -19,12 +19,13 @@ public class FinanceOperationCLI {
 
     public void start() throws JsonProcessingException {
         Scanner scanner = new Scanner(System.in).useDelimiter("\n");
-        while (scanner.hasNext()){
+        while (scanner.hasNext()) {
             String line = scanner.nextLine();
             if (line.equals("exit") || line.isEmpty()) {
                 return;
             }
-            List<FinanceOperation> operations = objectMapper.readValue(line, new TypeReference<>() {});
+            List<FinanceOperation> operations = objectMapper.readValue(line, new TypeReference<>() {
+            });
             List<FinanceOperationResult> financeOperationResults = financeOperationsCalculator.processFinanceOperations(operations);
             System.out.println(objectMapper.writeValueAsString(financeOperationResults));
         }

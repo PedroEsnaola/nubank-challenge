@@ -16,21 +16,21 @@ class BuyFinanceOperationProcessorTest {
 
         BuyFinanceOperationProcessor processor = new BuyFinanceOperationProcessor();
 
-        FinanceOperatorContext financeOperatorContext = new FinanceOperatorContext();
-        financeOperatorContext.setAverageCost(new BigDecimal("20.00"));
-        financeOperatorContext.setTotalShares(100L);
+        FinanceOperationContext financeOperationContext = new FinanceOperationContext();
+        financeOperationContext.setAverageCost(new BigDecimal("20.00"));
+        financeOperationContext.setTotalShares(100L);
 
         FinanceOperation financeOperation = new FinanceOperation();
         financeOperation.setUnitCost(new BigDecimal("30.00"));
         financeOperation.setQuantity(50L);
 
 
-        FinanceOperationResult result = processor.process(financeOperation, financeOperatorContext);
+        FinanceOperationResult result = processor.process(financeOperation, financeOperationContext);
 
 
         BigDecimal expectedNewAverageCost = new BigDecimal("23.33");
-        assertThat(financeOperatorContext.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);
-        assertThat(financeOperatorContext.getTotalShares()).isEqualTo(150L);
+        assertThat(financeOperationContext.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);
+        assertThat(financeOperationContext.getTotalShares()).isEqualTo(150L);
         assertThat(result).isNotNull();
         assertThat(result.getTax()).isEqualByComparingTo(BigDecimal.ZERO);
     }
@@ -41,21 +41,21 @@ class BuyFinanceOperationProcessorTest {
 
         BuyFinanceOperationProcessor processor = new BuyFinanceOperationProcessor();
 
-        FinanceOperatorContext financeOperatorContext = new FinanceOperatorContext();
-        financeOperatorContext.setAverageCost(BigDecimal.ZERO);
-        financeOperatorContext.setTotalShares(0L);
+        FinanceOperationContext financeOperationContext = new FinanceOperationContext();
+        financeOperationContext.setAverageCost(BigDecimal.ZERO);
+        financeOperationContext.setTotalShares(0L);
 
         FinanceOperation financeOperation = new FinanceOperation();
         financeOperation.setUnitCost(new BigDecimal("40.00"));
         financeOperation.setQuantity(100L);
 
 
-        FinanceOperationResult result = processor.process(financeOperation, financeOperatorContext);
+        FinanceOperationResult result = processor.process(financeOperation, financeOperationContext);
 
 
         BigDecimal expectedNewAverageCost = new BigDecimal("40.00");
-        assertThat(financeOperatorContext.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);
-        assertThat(financeOperatorContext.getTotalShares()).isEqualTo(100L);
+        assertThat(financeOperationContext.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);
+        assertThat(financeOperationContext.getTotalShares()).isEqualTo(100L);
         assertThat(result).isNotNull();
         assertThat(result.getTax()).isEqualByComparingTo(BigDecimal.ZERO);
     }
@@ -66,21 +66,21 @@ class BuyFinanceOperationProcessorTest {
 
         BuyFinanceOperationProcessor processor = new BuyFinanceOperationProcessor();
 
-        FinanceOperatorContext financeOperatorContext = new FinanceOperatorContext();
-        financeOperatorContext.setAverageCost(new BigDecimal("15.00"));
-        financeOperatorContext.setTotalShares(200L);
+        FinanceOperationContext financeOperationContext = new FinanceOperationContext();
+        financeOperationContext.setAverageCost(new BigDecimal("15.00"));
+        financeOperationContext.setTotalShares(200L);
 
         FinanceOperation financeOperation = new FinanceOperation();
         financeOperation.setUnitCost(new BigDecimal("25.123456"));
         financeOperation.setQuantity(300L);
 
 
-        FinanceOperationResult result = processor.process(financeOperation, financeOperatorContext);
+        FinanceOperationResult result = processor.process(financeOperation, financeOperationContext);
 
 
         BigDecimal expectedNewAverageCost = new BigDecimal("21.07");
-        assertThat(financeOperatorContext.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);
-        assertThat(financeOperatorContext.getTotalShares()).isEqualTo(500L);
+        assertThat(financeOperationContext.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);
+        assertThat(financeOperationContext.getTotalShares()).isEqualTo(500L);
         assertThat(result).isNotNull();
         assertThat(result.getTax()).isEqualByComparingTo(BigDecimal.ZERO);
     }

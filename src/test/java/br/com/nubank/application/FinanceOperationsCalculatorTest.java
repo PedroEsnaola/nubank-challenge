@@ -1,7 +1,7 @@
 package br.com.nubank.application;
 
 import br.com.nubank.application.operator.BuyFinanceOperationProcessor;
-import br.com.nubank.application.operator.FinanceOperatorFactory;
+import br.com.nubank.application.operator.FinanceOperationProcessorFactory;
 import br.com.nubank.application.operator.SellFinanceOperationProcessor;
 import br.com.nubank.domain.model.FinanceOperation;
 import br.com.nubank.domain.model.FinanceOperation.Operation;
@@ -17,26 +17,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FinanceOperationsCalculatorTest {
 
-    FinanceOperatorFactory financeOperatorFactory = new FinanceOperatorFactory(Arrays.asList(
+    FinanceOperationProcessorFactory financeOperationProcessorFactory = new FinanceOperationProcessorFactory(Arrays.asList(
             new BuyFinanceOperationProcessor(),
             new SellFinanceOperationProcessor()
     ));
-    FinanceOperationsCalculator underTest = new FinanceOperationsCalculator(financeOperatorFactory);
+    FinanceOperationsCalculator underTest = new FinanceOperationsCalculator(financeOperationProcessorFactory);
 
     @Test
     @DisplayName("givenListOfOperations_whenProcessing_shouldReturnExpectedResults")
     void givenListOfOperations_whenProcessing_shouldReturnExpectedResults() {
 
         List<FinanceOperation> operations = Arrays.asList(
-                new FinanceOperation(Operation.buy, BigDecimal.valueOf(10.00), 10000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(2.00), 5000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(20.00), 2000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(20.00), 2000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(25.00), 1000),
-                new FinanceOperation(Operation.buy, BigDecimal.valueOf(20.00), 10000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(15.00), 5000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(30.00), 4350),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(30.00), 650)
+                new FinanceOperation(Operation.BUY, BigDecimal.valueOf(10.00), 10000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(2.00), 5000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(20.00), 2000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(20.00), 2000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(25.00), 1000),
+                new FinanceOperation(Operation.BUY, BigDecimal.valueOf(20.00), 10000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(15.00), 5000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(30.00), 4350),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(30.00), 650)
         );
 
         List<FinanceOperationResult> expectedResults = Arrays.asList(
@@ -66,12 +66,11 @@ public class FinanceOperationsCalculatorTest {
     void givenAlternativeListOfOperations_whenProcessing_shouldReturnExpectedResults() {
 
 
-
         List<FinanceOperation> operations = Arrays.asList(
-                new FinanceOperation(Operation.buy, BigDecimal.valueOf(10.00), 10000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(50.00), 10000),
-                new FinanceOperation(Operation.buy, BigDecimal.valueOf(20.00), 10000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(50.00), 10000)
+                new FinanceOperation(Operation.BUY, BigDecimal.valueOf(10.00), 10000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(50.00), 10000),
+                new FinanceOperation(Operation.BUY, BigDecimal.valueOf(20.00), 10000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(50.00), 10000)
         );
 
         List<FinanceOperationResult> expectedResults = Arrays.asList(
@@ -96,13 +95,12 @@ public class FinanceOperationsCalculatorTest {
     void givenOperationsWithPartialSellAndLoss_whenProcessing_shouldReturnExpectedResults() {
 
 
-
         List<FinanceOperation> operations = Arrays.asList(
-                new FinanceOperation(Operation.buy, BigDecimal.valueOf(10.00), 10000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(2.00), 5000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(20.00), 2000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(20.00), 2000),
-                new FinanceOperation(Operation.sell, BigDecimal.valueOf(25.00), 1000)
+                new FinanceOperation(Operation.BUY, BigDecimal.valueOf(10.00), 10000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(2.00), 5000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(20.00), 2000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(20.00), 2000),
+                new FinanceOperation(Operation.SELL, BigDecimal.valueOf(25.00), 1000)
         );
 
         List<FinanceOperationResult> expectedResults = Arrays.asList(

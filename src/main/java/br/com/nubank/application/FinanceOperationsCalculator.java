@@ -1,7 +1,7 @@
 package br.com.nubank.application;
 
-import br.com.nubank.application.operator.FinanceOperatorContext;
-import br.com.nubank.application.operator.FinanceOperatorFactory;
+import br.com.nubank.application.operator.FinanceOperationContext;
+import br.com.nubank.application.operator.FinanceOperationProcessorFactory;
 import br.com.nubank.domain.model.FinanceOperation;
 import br.com.nubank.domain.model.FinanceOperationResult;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FinanceOperationsCalculator {
 
-    private final FinanceOperatorFactory financeOperatorFactory;
+    private final FinanceOperationProcessorFactory financeOperationProcessorFactory;
 
     public List<FinanceOperationResult> processFinanceOperations(List<FinanceOperation> financeOperations) {
-        FinanceOperatorContext financeOperatorContext = new FinanceOperatorContext();
+        FinanceOperationContext financeOperationContext = new FinanceOperationContext();
         return financeOperations.stream()
                 .map(financeOperation -> {
-                    return financeOperatorFactory.getProcessor(financeOperation.getOperation()).process(financeOperation, financeOperatorContext);
+                    return financeOperationProcessorFactory.getProcessor(financeOperation.getOperation()).process(financeOperation, financeOperationContext);
                 }).collect(Collectors.toList());
     }
 
