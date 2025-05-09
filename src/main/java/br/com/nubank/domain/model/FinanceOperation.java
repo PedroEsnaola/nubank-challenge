@@ -16,6 +16,7 @@ public class FinanceOperation {
     @JsonProperty("unit-cost")
     private BigDecimal unitCost;
     private long quantity;
+    private String ticker;
 
 
     public enum Operation {

@@ -19,4 +19,5 @@ public class Main {
         ObjectMapper objectMapper = JsonMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).build();
         new FinanceOperationCLI(objectMapper, new FinanceOperationsCalculator(financeOperationProcessorFactory)).start();
     }
+
 }

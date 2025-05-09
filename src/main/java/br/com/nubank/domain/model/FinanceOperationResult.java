@@ -6,9 +6,5 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class FinanceOperationResult {
-    private BigDecimal tax;
+public interface  FinanceOperationResult {
 }

@@ -29,7 +29,9 @@ os dados trafegados para tao bem como de dentro da camada de application
 Com o objetivo de garantir extensibilidade, testabilidade e um codigo limpo e claro, foi utilizado no calculo das
 operacões financeiras o padrão factory, visando a correta separação da responsabilidade entre operações de compra e de
 venda e permitindo, com facilidade a adesão de novas modalidades de operações
-citar solid
+Também, foram aplicados ao longo de todo o projeto, conceitos de solid e orientação a objetos, como polimorfismo para as
+implementações de cada interface de processamento de operações, como também uso de principios como Open-Closed e o
+Principio de Substituição de Liskov
 
 ## Tecnologias Adotada
 
@@ -55,10 +57,10 @@ o build
 - Esse comando, irá efetivamente inicializar o container a partir da imagem, os argumentos -i e -t indicam que após
   iniciado, um terminal interativo ficará disponivel para permitir o uso da ferramenta
 
-
 ## Executando os testes
 
-Com o objetivo de garantir o correto funcionamento da aplicação, foram inseridos testes unitarios e integrados utilizando Junit5
+Com o objetivo de garantir o correto funcionamento da aplicação, foram inseridos testes unitarios e integrados
+utilizando Junit5
 Para executar os testes é necessário possuir o [Maven](https://maven.apache.org/) instalado
 
 - Abra o terminal na pasta do projeto

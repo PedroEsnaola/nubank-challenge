@@ -19,4 +19,12 @@ public class FinanceOperationContextStubs {
         financeOperationContext.setLoss(loss);
         return financeOperationContext;
     }
+
+    public static FinanceOperationContext withAverageCostLossAndShares(BigDecimal averageCost, BigDecimal loss, Long shares) {
+        FinanceOperationContext financeOperationContext = new FinanceOperationContext();
+        financeOperationContext.setAverageCost(averageCost);
+        financeOperationContext.setLoss(loss);
+        financeOperationContext.setTotalShares(shares);
+        return financeOperationContext;
+    }
 }

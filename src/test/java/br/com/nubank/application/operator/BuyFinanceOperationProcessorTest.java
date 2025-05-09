@@ -2,6 +2,7 @@ package br.com.nubank.application.operator;
 
 import br.com.nubank.application.stubs.FinanceOperationContextStubs;
 import br.com.nubank.domain.model.FinanceOperationResult;
+import br.com.nubank.domain.model.TaxFinanceOperationResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ class BuyFinanceOperationProcessorTest {
     @DisplayName("Given a valid finance operation and context, when processing, should update average cost and total shares correctly")
     void givenValidOperationAndContext_whenProcessing_shouldUpdateAverageCostAndTotalSharesCorrectly() {
         var context = FinanceOperationContextStubs.withAverageCostAndTotalShares(BigDecimal.valueOf(20), 100);
-        var result = underTest.process(buying(new BigDecimal("30.00"), 50), context);
+        var result = (TaxFinanceOperationResult) underTest.process(buying(new BigDecimal("30.00"), 50), context);
 
         BigDecimal expectedNewAverageCost = new BigDecimal("23.33");
         assertThat(context.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);
@@ -31,7 +32,7 @@ class BuyFinanceOperationProcessorTest {
     @DisplayName("Given zero initial shares, when processing, should calculate average cost correctly")
     void givenZeroInitialShares_whenProcessing_shouldCalculateAverageCostCorrectly() {
         var context = FinanceOperationContextStubs.withAverageCostAndTotalShares(BigDecimal.valueOf(0), 0);
-        var result = underTest.process(buying(new BigDecimal("40.00"), 100), context);
+        var result = (TaxFinanceOperationResult) underTest.process(buying(new BigDecimal("40.00"), 100), context);
 
         BigDecimal expectedNewAverageCost = new BigDecimal("40.00");
         assertThat(context.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);
@@ -44,7 +45,7 @@ class BuyFinanceOperationProcessorTest {
     @DisplayName("Given a high precision unit cost, when processing, should normalize average cost to two decimal places")
     void givenHighPrecisionUnitCost_whenProcessing_shouldNormalizeAverageCostToTwoDecimalPlaces() {
         var context = FinanceOperationContextStubs.withAverageCostAndTotalShares(BigDecimal.valueOf(15), 200);
-        var result = underTest.process(buying(new BigDecimal("25.123456"), 300), context);
+        var result = (TaxFinanceOperationResult) underTest.process(buying(new BigDecimal("25.123456"), 300), context);
 
         BigDecimal expectedNewAverageCost = new BigDecimal("21.07");
         assertThat(context.getAverageCost()).isEqualByComparingTo(expectedNewAverageCost);

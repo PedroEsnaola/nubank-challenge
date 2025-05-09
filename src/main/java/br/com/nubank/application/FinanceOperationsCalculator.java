@@ -1,6 +1,8 @@
 package br.com.nubank.application;
 
+import br.com.nubank.application.operator.AccountOperationContext;
 import br.com.nubank.application.operator.FinanceOperationContext;
+import br.com.nubank.application.operator.FinanceOperationProcessor;
 import br.com.nubank.application.operator.FinanceOperationProcessorFactory;
 import br.com.nubank.domain.model.FinanceOperation;
 import br.com.nubank.domain.model.FinanceOperationResult;
@@ -15,11 +17,13 @@ public class FinanceOperationsCalculator {
     private final FinanceOperationProcessorFactory financeOperationProcessorFactory;
 
     public List<FinanceOperationResult> processFinanceOperations(List<FinanceOperation> financeOperations) {
-        FinanceOperationContext financeOperationContext = new FinanceOperationContext();
+        AccountOperationContext accountOperationContext = new AccountOperationContext();
         return financeOperations.stream()
                 .map(financeOperation -> {
-                    return financeOperationProcessorFactory.getProcessor(financeOperation.getOperation()).process(financeOperation, financeOperationContext);
+                    FinanceOperationProcessor processor = financeOperationProcessorFactory.getProcessor(financeOperation.getOperation());
+                    return processor.preValidate(financeOperation, accountOperationContext).orElseGet(() -> processor.process(financeOperation, accountOperationContext.getFinanceOperationContext(financeOperation.getTicker())));
                 }).collect(Collectors.toList());
     }
+
 
 }

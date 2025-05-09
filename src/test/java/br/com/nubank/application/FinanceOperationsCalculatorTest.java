@@ -6,6 +6,8 @@ import br.com.nubank.application.operator.SellFinanceOperationProcessor;
 import br.com.nubank.domain.model.FinanceOperation;
 import br.com.nubank.domain.model.FinanceOperation.Operation;
 import br.com.nubank.domain.model.FinanceOperationResult;
+import br.com.nubank.domain.model.FinanceOperationResultError;
+import br.com.nubank.domain.model.TaxFinanceOperationResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static br.com.nubank.application.stubs.FinanceOperationStubs.*;
@@ -14,6 +16,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -35,9 +38,7 @@ public class FinanceOperationsCalculatorTest {
         List<FinanceOperationResult> actualResults = underTest.processFinanceOperations(operations);
         assertThat(actualResults).hasSize(expectedResults.size());
         for (int i = 0; i < expectedResults.size(); i++) {
-            assertThat(actualResults.get(i).getTax())
-                    .as("Erro no índice: " + i)
-                    .isEqualByComparingTo(expectedResults.get(i).getTax());
+            assertThat(actualResults.get(i)).isEqualTo(expectedResults.get(i));
         }
     }
 
@@ -56,15 +57,15 @@ public class FinanceOperationsCalculatorTest {
                                 selling(BigDecimal.valueOf(30.00), 650)
                         ),
                         Arrays.asList(
-                                new FinanceOperationResult(BigDecimal.valueOf(0)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0.000)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0.000)),
-                                new FinanceOperationResult(BigDecimal.valueOf(3000.000)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0)),
-                                new FinanceOperationResult(BigDecimal.valueOf(3700.000)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0))
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(3000.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(3700.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN))
                         )),
                 Arguments.of(
                         Arrays.asList(
@@ -74,10 +75,10 @@ public class FinanceOperationsCalculatorTest {
                                 selling(BigDecimal.valueOf(50.00), 10000)
                         ),
                         Arrays.asList(
-                                new FinanceOperationResult(BigDecimal.valueOf(0)),
-                                new FinanceOperationResult(BigDecimal.valueOf(80000.000)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0)),
-                                new FinanceOperationResult(BigDecimal.valueOf(60000.000))
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(80000.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(60000.000).setScale(2, RoundingMode.HALF_EVEN))
                         )
                 ),
                 Arguments.of(
@@ -89,11 +90,33 @@ public class FinanceOperationsCalculatorTest {
                                 selling(BigDecimal.valueOf(25.00), 1000)
                         ),
                         Arrays.asList(
-                                new FinanceOperationResult(BigDecimal.valueOf(0)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0.000)),
-                                new FinanceOperationResult(BigDecimal.valueOf(0.000)),
-                                new FinanceOperationResult(BigDecimal.valueOf(3000.000))
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(3000.000).setScale(2, RoundingMode.HALF_EVEN))
+                        )
+                ),
+                Arguments.of(
+                        Arrays.asList(
+                                selling(BigDecimal.valueOf(20.00), 10000),
+                                selling(BigDecimal.valueOf(20.00), 10000),
+                                buying(BigDecimal.valueOf(10.00), 10000),
+                                selling(BigDecimal.valueOf(10.00), 10000),
+                                selling(BigDecimal.valueOf(20.00), 10000),
+                                selling(BigDecimal.valueOf(20.00), 10000),
+                                selling(BigDecimal.valueOf(20.00), 10000),
+                                selling(BigDecimal.valueOf(20.00), 10000)
+                        ),
+                        Arrays.asList(
+                                new FinanceOperationResultError("Can't sell more stocks than you have"),
+                                new FinanceOperationResultError("Can't sell more stocks than you have"),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new TaxFinanceOperationResult(BigDecimal.valueOf(0.000).setScale(2, RoundingMode.HALF_EVEN)),
+                                new FinanceOperationResultError("Can't sell more stocks than you have"),
+                                new FinanceOperationResultError("Can't sell more stocks than you have"),
+                                new FinanceOperationResultError("Can't sell more stocks than you have"),
+                                new FinanceOperationResultError("Your account is blocked")
                         )
                 )
         );
